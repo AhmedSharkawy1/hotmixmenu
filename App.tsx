@@ -9,7 +9,7 @@ const App: React.FC = () => {
   const [isDark, setIsDark] = useState<boolean>(() => {
     const saved = localStorage.getItem('theme');
     if (saved) return saved === 'dark';
-    return true;
+    return true; // الوضع الافتراضي ليلي
   });
   
   const navRef = useRef<HTMLDivElement>(null);
@@ -17,11 +17,9 @@ const App: React.FC = () => {
   const [showBottomCallMenu, setShowBottomCallMenu] = useState(false);
   const [currentUrl, setCurrentUrl] = useState('');
   
-  // State for horizontal scroll indicators
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
-  // Offset for scrolling to sections correctly
   const STICKY_OFFSET = 80;
 
   const triggerHaptic = (pattern: number | number[] = 10) => {
@@ -33,13 +31,15 @@ const App: React.FC = () => {
   useEffect(() => {
     setCurrentUrl(window.location.href);
     const root = document.documentElement;
+    const body = document.body;
+    
     if (isDark) {
       root.classList.add('dark');
-      root.classList.remove('light');
+      body.classList.add('dark');
       localStorage.setItem('theme', 'dark');
     } else {
-      root.classList.add('light');
       root.classList.remove('dark');
+      body.classList.remove('dark');
       localStorage.setItem('theme', 'light');
     }
   }, [isDark]);
@@ -147,10 +147,12 @@ const App: React.FC = () => {
 
   const whatsappMsg = encodeURIComponent("مرحباً مطعم هوت ميكس، أود الطلب من القائمة الرقمية.");
   const phoneNumbers = [
-    { label: "اتصالات", number: "01126770105" },
-    { label: "فودافون", number: "01094280173" },
-    { label: "أورانج", number: "01220691771" }
+    { label: "اتصالات", number: "01126770105", color: "#009739" },
+    { label: "فودافون", number: "01094280173", color: "#e60000" },
+    { label: "أورانج", number: "01220691771", color: "#ff7900" }
   ];
+
+  const mapsLink = "https://www.google.com/maps/search/مطعم+هوت+ميكس+البدرشين+خلف+المركز+بجوار+الإدارة+التعليمية";
 
   return (
     <div className="min-h-screen transition-colors duration-500 bg-zinc-50 dark:bg-[#050505] text-zinc-900 dark:text-zinc-200 antialiased selection:bg-orange-500/30">
@@ -234,7 +236,7 @@ const App: React.FC = () => {
 
       <main className="max-w-2xl mx-auto px-5 py-8 pb-48">
         <div className="mb-12 rounded-[2.5rem] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 p-8 relative overflow-hidden shadow-sm dark:shadow-2xl">
-          <div className="relative z-10">
+          <div className="relative z-10 text-right">
             <div className="flex items-center gap-2 mb-3">
               <span className="flex h-2 w-2 rounded-full bg-green-500 animate-pulse" aria-hidden="true"></span>
               <span className="text-green-600 dark:text-green-500 text-[10px] font-black uppercase tracking-widest">مفتوح الآن</span>
@@ -251,7 +253,7 @@ const App: React.FC = () => {
           <MenuSection key={section.id} section={section} isFirst={idx === 0} onInteraction={() => triggerHaptic(5)} />
         ))}
 
-        <section id="additions" className="scroll-mt-[100px] mb-10 reveal-item">
+        <section id="additions" className="scroll-mt-[100px] mb-10 reveal-item text-right">
           <div className="relative aspect-[16/10] md:aspect-[21/9] rounded-[2rem] overflow-hidden mb-5 shadow-2xl border-2 border-orange-500/30 bg-zinc-200 dark:bg-zinc-900">
             <img src={ADDITIONS_DATA.image} alt="" className="w-full h-full object-cover brightness-95" />
             <div className="absolute inset-0 bg-gradient-to-t from-orange-600/60 dark:from-zinc-950 via-transparent to-transparent"></div>
@@ -267,7 +269,7 @@ const App: React.FC = () => {
                 <div key={idx} className="flex justify-between items-center bg-white dark:bg-zinc-950 p-5 rounded-2xl border-2 border-orange-200 dark:border-white/10 shadow-md">
                   <span className="font-black text-zinc-900 dark:text-zinc-100 text-base">{add.name}</span>
                   <div className="bg-orange-600 px-5 py-2.5 rounded-xl border border-white/20 shadow-lg">
-                    <span className="text-white font-black text-xl leading-none">{add.price} ج</span>
+                    <span className="text-white font-black text-xl leading-none tabular-nums">{add.price} ج</span>
                   </div>
                 </div>
               ))}
@@ -282,7 +284,7 @@ const App: React.FC = () => {
               <div className="flex justify-between items-center pt-8 border-t border-white/30">
                  <span className="text-white font-black">سعر الإضافة</span>
                  <div className="bg-white px-6 py-3 rounded-[1.5rem] shadow-2xl">
-                   <span className="text-4xl font-black text-orange-600">{ADDITIONS_DATA.protein.price} ج</span>
+                   <span className="text-4xl font-black text-orange-600 tabular-nums">{ADDITIONS_DATA.protein.price} ج</span>
                  </div>
               </div>
             </div>
@@ -305,7 +307,6 @@ const App: React.FC = () => {
                     src={qrUrl} 
                     alt="QR Code" 
                     className="w-48 h-48 block"
-                    onLoad={() => console.log("QR Loaded")}
                   />
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className="w-10 h-10 bg-white rounded-xl shadow-lg flex items-center justify-center border-2 border-orange-500">
@@ -324,13 +325,19 @@ const App: React.FC = () => {
                </a>
             </div>
 
-            <div className="w-full bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-white/10 p-8 shadow-xl relative overflow-hidden group">
+            <a 
+              href={mapsLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => triggerHaptic(15)}
+              className="w-full bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-white/10 p-8 shadow-xl relative overflow-hidden group active:scale-[0.98] transition-transform block"
+            >
               <div className="flex flex-col gap-6 relative z-10 text-right">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 shrink-0 bg-orange-100 dark:bg-orange-950/30 rounded-2xl flex items-center justify-center text-2xl border border-orange-200/50">📍</div>
+                  <div className="w-12 h-12 shrink-0 bg-orange-100 dark:bg-orange-950/30 rounded-2xl flex items-center justify-center text-2xl border border-orange-200/50 group-hover:bg-orange-500 group-hover:text-white transition-colors">📍</div>
                   <div className="flex flex-col gap-1">
-                    <span className="text-[10px] font-black text-orange-600 dark:text-orange-500 tracking-widest">الموقع</span>
-                    <p className="text-zinc-800 dark:text-zinc-100 text-[13px] font-bold">البدرشين - خلف المركز - بجوار الإدارة التعليمية</p>
+                    <span className="text-[10px] font-black text-orange-600 dark:text-orange-500 tracking-widest uppercase">اضغط لفتح الخريطة</span>
+                    <p className="text-zinc-800 dark:text-zinc-100 text-[14px] font-black leading-snug">البدرشين - خلف المركز - بجوار الإدارة التعليمية</p>
                   </div>
                 </div>
                 <div className="w-full h-px bg-zinc-100 dark:bg-white/5"></div>
@@ -338,11 +345,13 @@ const App: React.FC = () => {
                   <div className="w-12 h-12 shrink-0 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center text-2xl border border-zinc-200/50">📞</div>
                   <div className="flex flex-col gap-1">
                     <span className="text-[10px] font-black text-zinc-400 tracking-widest uppercase">للتواصل المباشر</span>
-                    <a href="tel:01126770105" className="text-zinc-900 dark:text-white text-xl font-black">01126770105</a>
+                    <span className="text-zinc-900 dark:text-white text-lg font-black tabular-nums tracking-widest">01126770105</span>
                   </div>
                 </div>
               </div>
-            </div>
+              <div className="absolute inset-0 bg-orange-500/0 group-hover:bg-orange-500/[0.03] transition-colors pointer-events-none"></div>
+            </a>
+            
             <p className="text-zinc-500 dark:text-zinc-600 text-[11px] font-bold leading-relaxed text-center">
               تصميم وتنفيذ مهندس / احمد النقيب<br/>
               للتواصل <span className="tabular-nums font-black text-zinc-900 dark:text-zinc-400">01092621367</span>
@@ -351,16 +360,23 @@ const App: React.FC = () => {
         </footer>
       </main>
 
+      {/* Bottom Floating Nav */}
       <nav className="fixed bottom-0 left-0 right-0 z-[60] px-4 pb-[calc(var(--safe-bottom)+1.25rem)] pt-2 md:hidden">
-        <div className="max-w-xl mx-auto glass-card border border-zinc-200 dark:border-white/10 rounded-[2.5rem] p-2 flex items-center justify-around shadow-2xl relative">
+        <div className="max-w-xl mx-auto glass border border-zinc-200 dark:border-white/10 rounded-[2.5rem] p-2 flex items-center justify-around shadow-2xl relative">
           {showBottomCallMenu && (
             <>
               <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[59]" onClick={() => setShowBottomCallMenu(false)}></div>
-              <div className="absolute bottom-[calc(100%+1rem)] left-4 right-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden animate-slide-up z-[60]">
+              <div className="absolute bottom-[calc(100%+1.25rem)] left-0 right-0 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 rounded-[1.5rem] shadow-2xl overflow-hidden animate-slide-up z-[60] mx-2">
+                <div className="px-4 py-2 bg-zinc-50 dark:bg-white/5 border-b border-zinc-100 dark:border-white/5 text-right">
+                  <span className="text-[8px] font-black text-zinc-400 uppercase tracking-widest">اختر الشبكة</span>
+                </div>
                 {phoneNumbers.map((phone, idx) => (
-                  <a key={idx} href={`tel:${phone.number}`} onClick={() => setShowBottomCallMenu(false)} className="flex items-center justify-between px-6 py-5 border-b last:border-0 border-zinc-100 dark:border-white/5 transition-colors">
-                    <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400">{phone.label}</span>
-                    <span className="text-base font-black text-zinc-900 dark:text-white">{phone.number}</span>
+                  <a key={idx} href={`tel:${phone.number}`} onClick={() => setShowBottomCallMenu(false)} className="flex items-center justify-between px-4 py-3 border-b last:border-0 border-zinc-100 dark:border-white/5 transition-colors active:bg-orange-50 dark:active:bg-orange-500/10">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-1.5 h-1.5 rounded-full shadow-sm shrink-0" style={{ backgroundColor: phone.color }}></div>
+                      <span className="text-[9px] font-bold text-zinc-500 dark:text-zinc-400 whitespace-nowrap">{phone.label}</span>
+                    </div>
+                    <span className="text-[13px] font-black text-zinc-900 dark:text-white tabular-nums tracking-tighter whitespace-nowrap">{phone.number}</span>
                   </a>
                 ))}
               </div>
@@ -369,7 +385,7 @@ const App: React.FC = () => {
           <a href={`https://wa.me/201126770105?text=${whatsappMsg}`} className="flex-1 flex flex-col items-center py-2 gap-1 text-zinc-500 dark:text-zinc-400"><span className="text-2xl">💬</span><span className="text-[10px] font-black">واتساب</span></a>
           <button onClick={() => setShowBottomCallMenu(!showBottomCallMenu)} className={`flex-1 flex flex-col items-center py-2 gap-1 ${showBottomCallMenu ? 'text-orange-500' : 'text-zinc-500 dark:text-zinc-400'}`}><span className="text-2xl">📞</span><span className="text-[10px] font-black">اتصال</span></button>
           <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="bg-orange-600 w-14 h-14 rounded-full flex items-center justify-center text-white shadow-xl -mt-8 border-4 border-zinc-50 dark:border-[#050505] active:scale-90 transition-all z-10"><span className="text-xl">🔝</span></button>
-          <a href="https://www.google.com/maps/search/مطعم+هوت+ميكس+البدرشين" target="_blank" className="flex-1 flex flex-col items-center py-2 gap-1 text-zinc-500 dark:text-zinc-400"><span className="text-2xl">📍</span><span className="text-[10px] font-black">الموقع</span></a>
+          <a href={mapsLink} target="_blank" rel="noopener noreferrer" className="flex-1 flex flex-col items-center py-2 gap-1 text-zinc-500 dark:text-zinc-400"><span className="text-2xl">📍</span><span className="text-[10px] font-black">الموقع</span></a>
           <button onClick={(e) => handleNavClick(e, MENU_DATA[0].id)} className="flex-1 flex flex-col items-center py-2 gap-1 text-zinc-500 dark:text-zinc-400"><span className="text-2xl">📋</span><span className="text-[10px] font-black">المنيو</span></button>
         </div>
       </nav>

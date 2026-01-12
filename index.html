@@ -39,12 +39,24 @@
       :root { --brand-orange: #ff5f00; }
       body {
         font-family: 'Cairo', sans-serif;
-        background-color: #050505;
-        color: #fff;
+        /* إزالة الخلفية الثابتة للسماح لـ Tailwind بالتحكم */
+        margin: 0;
+        padding: 0;
         scroll-behavior: smooth;
         -webkit-tap-highlight-color: transparent;
       }
-      .glass { background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+      /* تحسين سلاسة الانتقال بين الأوضاع */
+      .transition-theme {
+        transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+      }
+      .glass { 
+        background: rgba(255, 255, 255, 0.8); 
+        backdrop-filter: blur(12px); 
+        -webkit-backdrop-filter: blur(12px); 
+      }
+      .dark .glass { 
+        background: rgba(15, 15, 15, 0.7); 
+      }
       .orange-glow { box-shadow: 0 0 20px rgba(255, 95, 0, 0.2); }
       .no-scrollbar::-webkit-scrollbar { display: none; }
       
@@ -64,7 +76,7 @@
     }
     </script>
   </head>
-  <body class="dark overflow-x-hidden">
+  <body class="overflow-x-hidden transition-theme">
     <div id="root"></div>
     <script type="module" src="index.tsx"></script>
   </body>
