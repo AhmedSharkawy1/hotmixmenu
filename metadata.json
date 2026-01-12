@@ -1,5 +1,9 @@
 {
   "name": "مطعم هوت ميكس - القائمة الرقمية",
-  "description": "قائمة طعام رقمية حديثة لمطعم هوت ميكس بالبدرشين، مصممة للموبايل وسهلة الاستخدام عبر رموز QR.",
+  "short_name": "Hot Mix",
+  "description": "قائمة طعام رقمية فاخرة لمطعم هوت ميكس بالبدرشين. اطلب الآن واستمتع بأفضل المذاقات.",
+  "theme_color": "#ff5f00",
+  "background_color": "#050505",
+  "display": "standalone",
   "requestFramePermissions": []
 }

@@ -4,10 +4,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover" />
-    <title>مطعم هوت ميكس | القائمة الرسمية</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>مطعم هوت ميكس | القائمة الرقمية الرسمية</title>
+    <meta name="title" content="مطعم هوت ميكس | القائمة الرقمية الرسمية" />
+    <meta name="description" content="اكتشف قائمة مطعم هوت ميكس بالبدرشين - بيتزا، مشويات، كريب، وسندوتشات بأفضل جودة." />
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hotmix-menu.vercel.app/" />
+    <meta property="og:title" content="مطعم هوت ميكس | القائمة الرسمية" />
+    <meta property="og:description" content="أشهى الأكلات والبيتزا الإيطالية في قلب البدرشين." />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?q=60&w=1200" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -15,127 +27,32 @@
         theme: {
           extend: {
             colors: {
-              brand: {
-                orange: '#ff5f00',
-              }
+              primary: '#ff5f00',
+              dark: '#050505',
+              card: '#0f0f0f'
             }
           }
         }
       }
-      
-      // Initialize theme early to prevent flash
-      (function() {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-          document.documentElement.classList.remove('dark');
-        } else {
-          document.documentElement.classList.add('dark');
-        }
-      })();
     </script>
     <style>
-      :root {
-        --brand-orange: #ff5f00;
-        --safe-bottom: env(safe-area-inset-bottom, 0px);
-      }
-      
+      :root { --brand-orange: #ff5f00; }
       body {
         font-family: 'Cairo', sans-serif;
+        background-color: #050505;
+        color: #fff;
         scroll-behavior: smooth;
         -webkit-tap-highlight-color: transparent;
-        text-rendering: optimizeLegibility;
-        -webkit-font-smoothing: antialiased;
-        transition: background-color 0.4s ease, color 0.4s ease;
       }
-
-      .dark body {
-        background-color: #050505;
-        color: #f4f4f5;
-      }
-
-      body:not(.dark) {
-        background-color: #f9fafb;
-        color: #111827;
-      }
-
-      .glass-card {
-        transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
-      }
-
-      .dark .glass-card {
-        background: rgba(15, 15, 18, 0.85);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-      }
-
-      .light .glass-card {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-      }
-
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
+      .glass { background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+      .orange-glow { box-shadow: 0 0 20px rgba(255, 95, 0, 0.2); }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
       
-      :focus-visible {
-        outline: none;
-        box-shadow: 0 0 0 4px var(--brand-orange);
-        border-radius: 12px;
-      }
-
       @keyframes reveal {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
       }
-
-      .reveal-item {
-        will-change: transform, opacity;
-        animation: reveal linear both;
-        animation-timeline: view();
-        animation-range: entry 5% cover 30%;
-      }
-
-      @supports not (animation-timeline: view()) {
-        .reveal-item {
-          animation: reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-      }
-
-      @keyframes popularPulse {
-        0%, 100% { transform: scale(1); filter: brightness(1); }
-        50% { transform: scale(1.04); filter: brightness(1.2); }
-      }
-      .animate-popular {
-        animation: popularPulse 2s infinite ease-in-out;
-      }
-
-      @keyframes spicyWiggle {
-        0%, 100% { transform: rotate(0deg) scale(1); }
-        25% { transform: rotate(-8deg) scale(1.1); }
-        75% { transform: rotate(8deg) scale(1.1); }
-      }
-      .animate-spicy {
-        display: inline-block;
-        animation: spicyWiggle 2s infinite ease-in-out;
-      }
-
-      @keyframes slideUp {
-        from { transform: translateY(100%); }
-        to { transform: translateY(0); }
-      }
-      .animate-slide-up {
-        animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      }
-
-      button, a {
-        user-select: none;
-        touch-action: manipulation;
-      }
+      .reveal-item { animation: reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     </style>
     <script type="importmap">
     {
@@ -147,7 +64,8 @@
     }
     </script>
   </head>
-  <body class="dark transition-colors duration-500">
+  <body class="dark overflow-x-hidden">
     <div id="root"></div>
+    <script type="module" src="index.tsx"></script>
   </body>
 </html>
